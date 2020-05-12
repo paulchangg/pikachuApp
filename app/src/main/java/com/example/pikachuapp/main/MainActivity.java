@@ -1,8 +1,10 @@
-package com.example.pikachuapp;
+package com.example.pikachuapp.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.pikachuapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

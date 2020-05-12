@@ -4,7 +4,7 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".cardListFragment">
+tools:context=".card.cardListFragment">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -24,7 +24,7 @@ tools:context=".cardListFragment">
         android:layout_margin="8dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSpot"
+            android:id="@+id/rvCard"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

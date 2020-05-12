@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/cardListFragment"
-        android:name="com.example.pikachuapp.cardListFragment"
+        android:name="com.example.pikachuapp.card.cardListFragment"
         android:label="fragment_card_list"
         tools:layout="@layout/fragment_card_list" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/cardDetailFragment"
-        android:name="com.example.pikachuapp.cardDetailFragment"
+        android:name="com.example.pikachuapp.card.cardDetailFragment"
         android:label="fragment_card_detail"
         tools:layout="@layout/fragment_card_detail" />
 </navigation>

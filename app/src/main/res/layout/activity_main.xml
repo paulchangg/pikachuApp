@@ -4,7 +4,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".main.MainActivity">
 
     <FrameLayout
         android:id="@+id/content"
@@ -19,13 +19,5 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/navigation_graph" />
     </FrameLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/user_info"
-        app:menu="@menu/navigation_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
