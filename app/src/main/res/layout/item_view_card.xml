@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
     android:foreground="?selectableItemBackground"
-    card_view:cardBackgroundColor="#F6F1D1"
+    card_view:cardBackgroundColor="@color/back"
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="1dp">
 
@@ -39,6 +39,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="32dp"
             android:text="CardName"
+            android:textColor="@color/textColor"
             android:textSize="18sp"
             card_view:layout_constraintStart_toEndOf="@+id/ivCard"
             card_view:layout_constraintTop_toTopOf="parent" />

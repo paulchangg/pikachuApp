@@ -3,4 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="gooseYellow">#F6F1D1</color>
+    <color name="background">#1F3A56</color>
+    <color name="textColor">#643030</color>
+    <color name="back">#FDFCF6</color>
+    <color name="text2">#A42525</color>
+
+
 </resources>
