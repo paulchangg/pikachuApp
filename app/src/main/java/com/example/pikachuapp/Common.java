@@ -27,7 +27,6 @@ public class Common {
      * 檢查是否有網路連線
      */
     public static boolean networkConnected(Activity activity) {
-        System.out.println("222222222222");
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {

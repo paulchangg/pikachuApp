@@ -22,7 +22,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.pikachuapp.Common;
 import com.example.pikachuapp.R;
 import com.example.pikachuapp.task.CardTask;
-import com.example.pikachuapp.task.ImgTask;
 import com.example.pikachuapp.task.ImageTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -105,10 +104,6 @@ public class cardListFragment extends Fragment {
         List<Card> cardList = new ArrayList<>();
         if (Common.networkConnected(activity)) {
             String url = Common.URL_SERVER + "cards/getCardAndroid";
-//            JsonObject jsonObject = new JsonObject();
-//            jsonObject.addProperty("action", "getAll");
-//            String jsonOut = jsonObject.toString();
-//            cardGetAllTask = new CommonTask(url, jsonOut);
             cardGetAllTask = new CardTask(url);
             try {
                 String jsonIn = cardGetAllTask.execute().get();
