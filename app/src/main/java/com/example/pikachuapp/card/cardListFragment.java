@@ -21,10 +21,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.pikachuapp.Common;
 import com.example.pikachuapp.R;
-import com.example.pikachuapp.task.CommonTask;
+import com.example.pikachuapp.task.CardTask;
+import com.example.pikachuapp.task.ImgTask;
 import com.example.pikachuapp.task.ImageTask;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -36,7 +36,7 @@ public class cardListFragment extends Fragment {
     private Activity activity;
     private RecyclerView rvCard;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private CommonTask cardGetAllTask;
+    private CardTask cardGetAllTask;
     private ImageTask cardImageTask;
     private List<Card> cards;
 
@@ -62,7 +62,6 @@ public class cardListFragment extends Fragment {
 
         rvCard.setLayoutManager(new LinearLayoutManager(activity));
         cards = getCards();
-        System.out.println("333333333333333333333333");
         showCards(cards);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -105,19 +104,18 @@ public class cardListFragment extends Fragment {
 
     private List<Card> getCards(){
         List<Card> cardList = new ArrayList<>();
-        System.out.println("1111111111111");
         if (Common.networkConnected(activity)) {
-            String url = Common.URL_SERVER + "cards/connAndroid";
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
-            String jsonOut = jsonObject.toString();
-            cardGetAllTask = new CommonTask(url, jsonOut);
+            String url = Common.URL_SERVER + "cards/getCardAndroid";
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("action", "getAll");
+//            String jsonOut = jsonObject.toString();
+//            cardGetAllTask = new CommonTask(url, jsonOut);
+            cardGetAllTask = new CardTask(url);
             try {
                 String jsonIn = cardGetAllTask.execute().get();
                 Type listType = new TypeToken<List<Card>>() {
                 }.getType();
                 cardList = new Gson().fromJson(jsonIn, listType);
-                System.out.println("!!!!!!!!!!!!!!!!!"+cardList.toString());
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
@@ -185,19 +183,19 @@ public class cardListFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
             final Card card = cards.get(position);
             int id = card.getC_id();
-            String url = Common.URL_SERVER + "/cards/connAndroid";
+            String url = Common.URL_SERVER + "/cards/getImageAndroid";
             cardImageTask = new ImageTask(url, id, imageSize, myViewHolder.ivCard);
             cardImageTask.execute();
             myViewHolder.tvCardName.setText(card.getC_name());
-            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("card", card);
-                    Navigation.findNavController(view)
-                            .navigate(R.id.action_cardListFragment_to_cardDetailFragment, bundle);
-                }
-            });
+//            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("card", card);
+//                    Navigation.findNavController(view)
+//                            .navigate(R.id.action_cardListFragment_to_cardDetailFragment, bundle);
+//                }
+//            });
 //            myViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
 //                @Override
 //                public boolean onLongClick(final View view) {

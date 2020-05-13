@@ -7,21 +7,17 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.pikachuapp.R;
-import com.google.gson.JsonObject;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 
-public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
-    private final static String TAG = "ImageTask";
+public class ImgTask extends AsyncTask<Object, Integer, Bitmap> {
+    private final static String TAG = "ImgTask";
     private String url;
-    private int id, imageSize;
+
     /* ImageTask的屬性strong參照到SpotListFragment內的imageView不好，
         會導致SpotListFragment進入背景時imageView被參照而無法被釋放，
         而且imageView會參照到Context，也會導致Activity無法被回收。
@@ -29,28 +25,20 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     private WeakReference<ImageView> imageViewWeakReference;
 
     // 取單張圖片
-    public ImageTask(String url, int id, int imageSize) {
-        this(url, id, imageSize, null);
+    public ImgTask(String url) {
+        this(url, null);
     }
 
     // 取完圖片後使用傳入的ImageView顯示，適用於顯示多張圖片
-    public ImageTask(String url, int id, int imageSize, ImageView imageView) {
+    public ImgTask(String url, ImageView imageView) {
         this.url = url;
-        this.id = id;
-        this.imageSize = imageSize;
         this.imageViewWeakReference = new WeakReference<>(imageView);
     }
 
     @Override
     protected Bitmap doInBackground(Object... params) {
-//        HashMap<String, Integer> param = new HashMap<>();
-////        param.put("id", id);
-////        param.put("imageSize", imageSize);
-////        return getRemoteImage(url, convertWithIteration(param));
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", id);
-        jsonObject.addProperty("imageSize", imageSize);
-        return getRemoteImage(url, jsonObject.toString());
+
+        return getRemoteImage(url);
     }
 
     @Override
@@ -66,7 +54,7 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
         }
     }
 
-    private Bitmap getRemoteImage(String url, String jsonOut) {
+    private Bitmap getRemoteImage(String url) {
         HttpURLConnection connection = null;
         Bitmap bitmap = null;
         try {
@@ -75,12 +63,6 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
             connection.setDoOutput(true); // allow outputs
             connection.setUseCaches(false); // do not use a cached copy
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type","application/json;charset=utf-8");
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-            bw.write(jsonOut);
-            Log.d(TAG, "output: " + jsonOut);
-            bw.flush();
-            bw.close();
 
             int responseCode = connection.getResponseCode();
 
@@ -99,13 +81,4 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
         }
         return bitmap;
     }
-
-//    public String convertWithIteration(HashMap<String, Integer> map) {
-//        StringBuilder mapAsString = new StringBuilder("{");
-//        for (String key : map.keySet()) {
-//            mapAsString.append(key + ":" + map.get(key) + ",");
-//        }
-//        mapAsString.delete(mapAsString.length()-1, mapAsString.length()).append("}");
-//        return mapAsString.toString();
-//    }
 }
