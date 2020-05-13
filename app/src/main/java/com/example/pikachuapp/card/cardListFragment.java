@@ -49,7 +49,7 @@ public class cardListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        activity.setTitle("Card");
+        activity.setTitle("比卡丘");
         return inflater.inflate(R.layout.fragment_card_list, container, false);
     }
 
@@ -187,21 +187,29 @@ public class cardListFragment extends Fragment {
             cardImageTask = new ImageTask(url, id, imageSize, myViewHolder.ivCard);
             cardImageTask.execute();
             myViewHolder.tvCardName.setText(card.getC_name());
-//            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("card", card);
-//                    Navigation.findNavController(view)
-//                            .navigate(R.id.action_cardListFragment_to_cardDetailFragment, bundle);
-//                }
-//            });
-//            myViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(final View view) {
-//
-//                }
-//            });
+            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("card", card);
+                    Navigation.findNavController(view)
+                            .navigate(R.id.action_cardListFragment_to_cardDetailFragment, bundle);
+                }
+            });
+        }
+
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (cardGetAllTask != null) {
+            cardGetAllTask.cancel(true);
+            cardGetAllTask = null;
+        }
+
+        if (cardImageTask != null) {
+            cardImageTask.cancel(true);
+            cardImageTask = null;
         }
 
     }

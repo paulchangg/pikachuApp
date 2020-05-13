@@ -1,112 +1,86 @@
 package com.example.pikachuapp.card;
 
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
+import com.example.pikachuapp.Common;
 import com.example.pikachuapp.R;
+import com.example.pikachuapp.task.ImageTask;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link cardDetailFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link cardDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class cardDetailFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private final static String TAG = "TAG_CardDetailFragment";
+    private FragmentActivity activity;
+    private ImageView ivCardD;
+    private TextView tvNameD,tvAnnlFeeD,tvFcbD,tvDcbD;
+    private Card card;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
-
-    public cardDetailFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment cardDetailFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static cardDetailFragment newInstance(String param1, String param2) {
-        cardDetailFragment fragment = new cardDetailFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        activity = getActivity();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_card_detail, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ivCardD = view.findViewById(R.id.ivCardD);
+        tvNameD = view.findViewById(R.id.tvNameD);
+        tvAnnlFeeD = view.findViewById(R.id.tvAnnlFeeD);
+        tvFcbD = view.findViewById(R.id.tvFcbD);
+        tvDcbD = view.findViewById(R.id.tvDcbD);
+        final NavController navController = Navigation.findNavController(view);
+        Bundle bundle = getArguments();
+
+        if (bundle == null || bundle.getSerializable("card") == null) {
+            Common.showToast(activity, R.string.textNoCardsFound);
+            navController.popBackStack();
+            return;
         }
+        card = (Card) bundle.getSerializable("card");
+        showCard();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+    private void showCard() {
+        String url = Common.URL_SERVER + "/cards/getImageAndroid";
+        int id = card.getC_id();
+        int imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+        Bitmap bitmap = null;
+        try {
+            bitmap = new ImageTask(url, id, imageSize).execute().get();
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        }
+        if (bitmap != null) {
+            ivCardD.setImageBitmap(bitmap);
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            ivCardD.setImageResource(R.drawable.no_image);
         }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        tvNameD.setText(card.getC_name());
+        tvAnnlFeeD.setText(card.getAnnlfee());
+        tvFcbD.setText(String.valueOf(card.getFcb()));
+        tvDcbD.setText(String.valueOf(card.getDcb()));
     }
 }
